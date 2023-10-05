@@ -4,6 +4,7 @@ const userName = document.getElementById('name');
 const userEmail = document.getElementById('email');
 const userMessage = document.getElementById('message');
 const btn = document.getElementById('btn');
+const clear = document.getElementById('clear')
 
 // function createDataObject(e) {
 //     e.preventDefault();
@@ -60,7 +61,7 @@ const btn = document.getElementById('btn');
 
 // EXTRA - Version 2
 
-const allUsers = []
+const allUsers = JSON.parse(localStorage.getItem("allUsers")) || [];
 
 function createDataObject(e) {
     e.preventDefault();
@@ -73,19 +74,26 @@ function createDataObject(e) {
     allUsers.push(user)
     
     
-    localStorage.allUsers = JSON.stringify(allUsers);
+    localStorage.setItem('allUsers', JSON.stringify(allUsers));
     
     const storedUsers = JSON.parse(localStorage.getItem("allUsers"));
-    const newPar = document.createElement('p');
+    const container = document.querySelector('div');
+    container.innerHTML = ""
     
     for (let i=0; i<storedUsers.length; i++){
+        console.log(i, storedUsers[i])
+        const newPar = document.createElement('p');
         newPar.innerHTML = `User #${i+1}<br>Name: ${storedUsers[i].name}<br>Email: ${storedUsers[i].email}<br>Message: ${storedUsers[i].message}`;
-        document.querySelector('body').appendChild(newPar);
+        container.appendChild(newPar)
     }
    
     document.getElementById('myForm').reset();
 }
 
 
+
 btn.addEventListener('click', createDataObject);
-clear.addEventListener('click', localStorage.clear())
+clear.addEventListener('click', ()=>{
+    localStorage.clear();
+    document.querySelector('div').innerHTML = '';
+})
